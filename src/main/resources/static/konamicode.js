@@ -3,8 +3,7 @@ $(function () {
     var ws = new WebSocket("ws://localhost:8080/ws");
 
     $(document).keyup(function(ev) {
-        msg = { keycode: ev.keyCode };
-        ws.send(JSON.stringify(msg));
+        ws.send(ev.keyCode);
     });
 
     ws.onmessage = function(msg) {
