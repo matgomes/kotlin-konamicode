@@ -21,7 +21,7 @@ class WebSocket: WebSocketHandler{
     override fun handle(session: WebSocketSession): Mono<Void> {
 
         return session.send(
-                handleMessage(session.receive()).flatMap { message(it, session) }
+                handleMessage(session.receive()).flatMap { message(session) }
         )
     }
 
@@ -30,10 +30,13 @@ class WebSocket: WebSocketHandler{
         return messageFlux.map { it.payloadAsText }
                           .buffer(10, 1)
                           .map { it == expectedOrder }
+                          .filter { it }
     }
 
-    fun message(result: Boolean, session: WebSocketSession): Mono<WebSocketMessage> {
-        return if(result) session.textMessage("KONAMI").toMono() else Mono.empty()
+    fun message(session: WebSocketSession): Mono<WebSocketMessage> {
+        return "KONAMI".monoTextMessage(session)
     }
 
 }
+
+fun String.monoTextMessage(session: WebSocketSession): Mono<WebSocketMessage> = session.textMessage(this).toMono()
