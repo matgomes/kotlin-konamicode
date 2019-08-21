@@ -39,4 +39,6 @@ class WebSocket: WebSocketHandler{
 
 }
 
-fun String.monoTextMessage(session: WebSocketSession): Mono<WebSocketMessage> = session.textMessage(this).toMono()
+fun String.monoTextMessage(session: WebSocketSession): Mono<WebSocketMessage> {
+  return session.textMessage(this).toMono()
+}
