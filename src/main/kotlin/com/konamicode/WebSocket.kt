@@ -7,6 +7,7 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 
 enum class KeyMap(val value: String) {
     UP("38"), DOWN("40"), LEFT("37"), RIGHT("39"), B("66"), A("65")
@@ -32,7 +33,7 @@ class WebSocket: WebSocketHandler{
     }
 
     fun message(result: Boolean, session: WebSocketSession): Mono<WebSocketMessage> {
-        return if(result) Mono.just(session.textMessage("KONAMI")) else Mono.empty()
+        return if(result) session.textMessage("KONAMI").toMono() else Mono.empty()
     }
 
 }
