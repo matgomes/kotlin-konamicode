@@ -16,7 +16,7 @@ enum class KeyMap(val value: String) {
 @Component
 class WebSocket: WebSocketHandler{
 
-    val expectedOrder: List<String> = listOf(UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT, B, A).map { it.value }
+    val expectedOrder = listOf(UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT, B, A).map { it.value }
 
     override fun handle(session: WebSocketSession): Mono<Void> {
 
