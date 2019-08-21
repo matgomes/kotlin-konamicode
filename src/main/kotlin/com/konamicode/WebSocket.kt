@@ -26,7 +26,7 @@ class WebSocket: WebSocketHandler{
 
     fun handleMessage(messageFlux: Flux<WebSocketMessage>): Flux<Boolean> {
 
-        return messageFlux.map(WebSocketMessage::getPayloadAsText)
+        return messageFlux.map { it.payloadAsText }
                           .buffer(10, 1)
                           .map { it == expectedOrder }
     }
