@@ -32,11 +32,11 @@ class WebSocket: WebSocketHandler{
     }
 
     fun message(session: WebSocketSession): WebSocketMessage {
-        return "KONAMI".monoTextMessage(session)
+        return "KONAMI".toWebSocketMessage(session)
     }
 
 }
 
-fun String.monoTextMessage(session: WebSocketSession): WebSocketMessage {
+fun String.toWebSocketMessage(session: WebSocketSession): WebSocketMessage {
     return session.textMessage(this)
 }
