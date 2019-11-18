@@ -7,7 +7,6 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
 
 enum class KeyMap(val value: String) {
     UP("38"), DOWN("40"), LEFT("37"), RIGHT("39"), B("66"), A("65")
@@ -21,24 +20,23 @@ class WebSocket: WebSocketHandler{
     override fun handle(session: WebSocketSession): Mono<Void> {
 
         return session.send(
-                handleMessage(session.receive()).flatMap { message(session) }
+                handleMessage(session.receive()).map { message(session) }
         )
     }
 
-    fun handleMessage(messageFlux: Flux<WebSocketMessage>): Flux<Boolean> {
+    fun handleMessage(messageFlux: Flux<WebSocketMessage>): Flux<MutableList<String>> {
 
         return messageFlux.map { it.payloadAsText }
                           .buffer(10, 1)
-                          .map { it == expectedOrder }
-                          .filter { it }
+                          .filter { it == expectedOrder }
     }
 
-    fun message(session: WebSocketSession): Mono<WebSocketMessage> {
+    fun message(session: WebSocketSession): WebSocketMessage {
         return "KONAMI".monoTextMessage(session)
     }
 
 }
 
-fun String.monoTextMessage(session: WebSocketSession): Mono<WebSocketMessage> {
-    return session.textMessage(this).toMono()
+fun String.monoTextMessage(session: WebSocketSession): WebSocketMessage {
+    return session.textMessage(this)
 }
